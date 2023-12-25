@@ -941,9 +941,8 @@ func (connection *Connection) ReadRecords(mfnList []int) (result []MarcRecord) {
 		return
 	}
 
-	query := NewClientQuery(connection, "G")
+	query := NewClientQuery(connection, "C")
 	query.AddAnsi(connection.Database).NewLine()
-	query.AddAnsi(ALL_FORMAT).NewLine()
 	query.Add(len(mfnList)).NewLine()
 	for _, mfn := range mfnList {
 		query.Add(mfn).NewLine()
@@ -959,11 +958,6 @@ func (connection *Connection) ReadRecords(mfnList []int) (result []MarcRecord) {
 		if len(line) == 0 {
 			continue
 		}
-		parts := strings.SplitN(line, "#", 2)
-		if len(parts) != 2 {
-			continue
-		}
-		parts = strings.Split(parts[1], FirstDelimiter)[1:]
 		record := NewMarcRecord()
 		record.Decode(lines)
 		record.Database = connection.Database
